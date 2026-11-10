@@ -66,8 +66,3 @@ Las rutas siguen los mockups (M01–M53, W01–W23) y los user flows F01–F15:
 | | `#/rev/historial/:id` | M42, W21 | US36 |
 | | `#/rev/contenido`, `#/rev/autor/:id` | M46, W22 | US34 |
 - **Recordatorios (US24):** notifican mientras la app está abierta o con el permiso de notificaciones del navegador.
-
-## Despliegue en GitHub Pages
-
-Sube la carpeta `web/` a la raíz del repositorio (rama `main`) y en **Settings → Pages** elige «Deploy from a branch», `main`, `/ (root)`. Quedan:
-`https://<usuario>.github.io/<repositorio>/` (redirige a la landing), `…/pages/` y `…/app/`.
