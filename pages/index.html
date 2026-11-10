@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NutriMap Estudiantil · Come mejor cerca del campus</title>
+  <meta name="description" content="NutriMap reúne precios, distancia, planificación semanal y educación sobre hierro para que los estudiantes universitarios decidan qué comer sin salirse de su presupuesto.">
+  <meta name="theme-color" content="#1B5E20">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../assets/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../css/styles.css">
+  <script defer src="../js/data.js"></script>
+  <script defer src="../js/main.js"></script>
+</head>
+<body>
+  <!-- Íconos (Material Symbols Rounded redibujados como SVG lineal de 2 px, rejilla 24 px · 4.1.3) -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 5L3 7v12l6-2 6 2 6-2V5l-6 2-6-2zM9 5v12M15 7v12"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 7h11M9 12h11M9 17h11M4.5 7h.01M4.5 12h.01M4.5 17h.01"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 4l2.4 5 5.4.6-4 3.7 1.1 5.4L12 16l-4.9 2.7 1.1-5.4-4-3.7 5.4-.6z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4.5l3 1.8"/></symbol>
+    <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="1.6"/><path d="M10 21l2-6-2.5-2.5L11 8l3 2.5 3 1M12 15l2.5 2.5L15 21M9.5 12.5L7 11l1.5-4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5.5M12 16.4v.1"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.1"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M5 19l1-4L15.5 5.5a2 2 0 013 3L9 18l-4 1z"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M5 15V6a1 1 0 011-1h9"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24"><path d="M7 7h12l-3-3M17 17H5l3 3"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8M18 14v4a1 1 0 01-1 1H6a1 1 0 01-1-1V7a1 1 0 011-1h4"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1-4 3.8-6 7-6s6 2 7 6"/></symbol>
+    <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9l1.5-4h13L20 9M4 9v10h16V9M4 9h16M10 19v-5h4v5"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14zM5 19l7-7"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-gps" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#inicio" aria-label="NutriMap Estudiantil, ir al inicio">
+        <img src="../assets/images/logo.svg" alt="" width="32" height="32">
+        <span>NutriMap</span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-principal">
+        <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+        <span class="menu-toggle-label">Menú</span>
+      </button>
+
+      <nav id="menu-principal" class="main-nav" aria-label="Principal">
+        <ul>
+          <li><a href="#como-funciona">Cómo funciona</a></li>
+          <li><a href="#beneficios">Beneficios</a></li>
+          <li><a href="#radar">Radar de ejemplo</a></li>
+          <li><a href="#faq">Preguntas</a></li>
+          <li><a href="#equipo">Equipo</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a class="btn btn-secondary btn-compact" href="../app/index.html#/ingresar">Iniciar sesión</a>
+          <a class="btn btn-primary btn-compact" href="../app/index.html">Abrir la app</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido" tabindex="-1">
+
+    <!-- US37 · Propuesta de valor -->
+    <section id="inicio" class="hero" aria-labelledby="hero-title" data-hu="US37">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1 id="hero-title">Decide qué comer cerca de tu campus, sin pasarte del presupuesto</h1>
+          <p class="lead">Para estudiantes, comercios y nutricionistas: NutriMap junta en un solo lugar los menús cercanos con precio y distancia, tu plan semanal con su lista de compras y contenido sobre alimentos con hierro revisado por nutricionistas.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="../app/index.html#/registro">Crear cuenta gratis</a>
+            <a class="btn btn-secondary" href="#radar">Probar el radar de ejemplo</a>
+          </div>
+          <ul class="hero-points">
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Precio, distancia y horario en cada local</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Plan semanal y lista de compras según tu presupuesto</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>No diagnostica ni reemplaza una consulta de salud</li>
+          </ul>
+        </div>
+        <img class="hero-art" src="../assets/images/hero-ilustracion.svg" width="480" height="360"
+             alt="Mapa alrededor del campus con locales marcados por su precio, S/ 10 y S/ 7, una etiqueta de hierro y tu ubicación en el centro.">
+      </div>
+    </section>
+
+    <!-- US38 · Cómo funciona -->
+    <section id="como-funciona" class="section" aria-labelledby="como-title" data-hu="US38">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="como-title">Cómo funciona</h2>
+          <p>Del campus a una decisión informada en cuatro pasos. Todo esto lo haces dentro de <a href="../app/index.html">la app de NutriMap</a>.</p>
+        </header>
+        <ol class="steps">
+          <li class="step card">
+            <img src="../assets/images/paso-1-campus.svg" width="240" height="160" loading="lazy" alt="Pin de ubicación sobre el edificio del campus.">
+            <h3><span class="step-num" aria-hidden="true">1</span>Define tu campus</h3>
+            <p>Usa tu ubicación solo mientras usas NutriMap o elige tu campus a mano.</p>
+          </li>
+          <li class="step card">
+            <img src="../assets/images/paso-2-radar.svg" width="240" height="160" loading="lazy" alt="Mapa con locales cercanos marcados por su precio: S/ 10, S/ 7 y S/ 4.50.">
+            <h3><span class="step-num" aria-hidden="true">2</span>Explora el radar</h3>
+            <p>Compara precio, distancia, horario y si el plato aporta hierro.</p>
+          </li>
+          <li class="step card">
+            <img src="../assets/images/paso-3-plan.svg" width="240" height="160" loading="lazy" alt="Calendario semanal con el martes resaltado y comidas en cada día.">
+            <h3><span class="step-num" aria-hidden="true">3</span>Planifica la semana</h3>
+            <p>Genera un plan de 7 días que respete cuánto puedes gastar.</p>
+          </li>
+          <li class="step card">
+            <img src="../assets/images/paso-4-compra.svg" width="240" height="160" loading="lazy" alt="Lista de compras con dos productos marcados y un artículo educativo al lado.">
+            <h3><span class="step-num" aria-hidden="true">4</span>Compra y aprende</h3>
+            <p>Usa la lista de compras y lee qué alimentos aportan hierro.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- US39 · Beneficios por perfil -->
+    <section id="beneficios" class="section section-alt" aria-labelledby="beneficios-title" data-hu="US39">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="beneficios-title">¿Qué gano con NutriMap?</h2>
+          <p>Elige tu perfil para ver los beneficios que te corresponden.</p>
+        </header>
+        <div class="tabs" data-tabs>
+          <div class="tablist" role="tablist" aria-label="Perfil">
+            <button role="tab" id="tab-est" aria-controls="panel-est" aria-selected="true">
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-user"/></svg>Estudiantes</button>
+            <button role="tab" id="tab-com" aria-controls="panel-com" aria-selected="false" tabindex="-1">
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-store"/></svg>Comercios</button>
+            <button role="tab" id="tab-nut" aria-controls="panel-nut" aria-selected="false" tabindex="-1">
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-leaf"/></svg>Nutricionistas</button>
+          </div>
+          <div role="tabpanel" id="panel-est" aria-labelledby="tab-est" tabindex="0" class="tabpanel">
+            <ul class="benefits">
+              <li><strong>Decides en menos pasos.</strong> Ves precio, distancia y tiempo a pie sin abrir varias aplicaciones.</li>
+              <li><strong>Cuidas tu presupuesto.</strong> El plan semanal y el radar respetan el monto que definiste.</li>
+              <li><strong>Sabes qué comprar.</strong> El plan se convierte en una lista agrupada por categoría.</li>
+              <li><strong>Aprendes con fuentes.</strong> El contenido sobre hierro indica quién lo revisó y cuándo.</li>
+            </ul>
+            <a class="btn btn-secondary" href="../app/index.html#/registro">Crear mi cuenta en la app</a>
+          </div>
+          <div role="tabpanel" id="panel-com" aria-labelledby="tab-com" tabindex="0" class="tabpanel" hidden>
+            <ul class="benefits">
+              <li><strong>Te encuentran estudiantes cercanos.</strong> Tu local aparece en el radar con precio y distancia.</li>
+              <li><strong>Actualizas desde el celular.</strong> Cambias menú, precio y disponibilidad en un solo formulario.</li>
+              <li><strong>Avisas cuando se acaba un plato.</strong> Lo marcas como agotado con un toque.</li>
+              <li><strong>Corriges datos reportados.</strong> Recibes los reportes de los estudiantes para mantener tu ficha al día.</li>
+            </ul>
+            <a class="btn btn-secondary" href="../app/index.html#/acceso-rol?r=com">Entrar como comercio</a>
+          </div>
+          <div role="tabpanel" id="panel-nut" aria-labelledby="tab-nut" tabindex="0" class="tabpanel" hidden>
+            <ul class="benefits">
+              <li><strong>Revisas antes de publicar.</strong> Ningún contenido educativo sale sin tu aprobación.</li>
+              <li><strong>Validas las etiquetas de hierro.</strong> Solo los platos aprobados muestran “Fuente de hierro”.</li>
+              <li><strong>Mantienes los límites claros.</strong> Cada artículo lleva el aviso de que NutriMap no diagnostica.</li>
+            </ul>
+            <a class="btn btn-secondary" href="../app/index.html#/acceso-rol?r=rev">Entrar como nutricionista</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- US40 · Radar de ejemplo -->
+    <section id="radar" class="section" aria-labelledby="radar-title" data-hu="US40">
+      <div class="container">
+        <header class="section-head section-head-row">
+          <div>
+            <h2 id="radar-title">Prueba un radar de ejemplo</h2>
+            <p>Filtra por presupuesto y distancia con locales simulados alrededor de UPC Monterrico. El radar real, con tu ubicación, está en la app.</p>
+          </div>
+          <span class="badge badge-warning"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-info"/></svg>Datos de ejemplo, no reales</span>
+        </header>
+        <div class="card demo-radar">
+          <div class="demo-filters">
+            <fieldset class="field">
+              <legend>Presupuesto máximo por comida</legend>
+              <div class="chip-group" data-demo-group="price">
+                <button type="button" class="chip" data-value="5" aria-pressed="false">Hasta S/ 5</button>
+                <button type="button" class="chip" data-value="8" aria-pressed="false">Hasta S/ 8</button>
+                <button type="button" class="chip" data-value="12" aria-pressed="false">Hasta S/ 12</button>
+                <button type="button" class="chip" data-value="" aria-pressed="true">Sin límite</button>
+              </div>
+            </fieldset>
+            <fieldset class="field">
+              <legend>Distancia máxima</legend>
+              <div class="chip-group" data-demo-group="distance">
+                <button type="button" class="chip" data-value="500" aria-pressed="false">500 m</button>
+                <button type="button" class="chip" data-value="1000" aria-pressed="false">1 km</button>
+                <button type="button" class="chip" data-value="2000" aria-pressed="true">2 km</button>
+              </div>
+            </fieldset>
+          </div>
+          <p class="results-count" data-demo-count aria-live="polite"></p>
+          <ul class="place-list demo-list" data-demo-list></ul>
+          <div class="empty-state" data-demo-empty hidden>
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-search"/></svg>
+            <p data-demo-empty-text></p>
+            <div class="empty-actions"><button type="button" class="btn btn-primary btn-compact" data-demo-reset>Restablecer filtro</button></div>
+          </div>
+          <p class="hint">¿Te gustó? <a href="../app/index.html#/registro">Crea tu cuenta</a> y usa el radar real con tu campus.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Acceso a la app (espacio aparte de la landing) -->
+    <section id="app" class="section section-alt" aria-labelledby="app-title" data-hu="US37">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="app-title">Entra a la app</h2>
+          <p>La app es un espacio independiente de este sitio. Elige cómo quieres entrar.</p>
+        </header>
+        <ul class="app-entries">
+          <li class="card entry">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-user"/></svg>
+            <h3>Soy estudiante</h3>
+            <p>Radar de comida cerca, plan semanal, lista de compras, gasto y recetas con hierro.</p>
+            <a class="btn btn-primary" href="../app/index.html">Abrir la app</a>
+          </li>
+          <li class="card entry">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-store"/></svg>
+            <h3>Soy comercio</h3>
+            <p>Registra tu negocio, publica tu oferta del día y marca tus platos como agotados con un toque.</p>
+            <a class="btn btn-secondary" href="../app/index.html#/acceso-rol?r=com">Entrar como comercio</a>
+          </li>
+          <li class="card entry">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-leaf"/></svg>
+            <h3>Soy nutricionista</h3>
+            <p>Revisa artículos, comenta por fragmento, valida etiquetas de hierro y consulta el historial.</p>
+            <a class="btn btn-secondary" href="../app/index.html#/acceso-rol?r=rev">Entrar como nutricionista</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- US43 · Preguntas frecuentes -->
+    <section id="faq" class="section" aria-labelledby="faq-title" data-hu="US43">
+      <div class="container narrow">
+        <header class="section-head">
+          <h2 id="faq-title">Preguntas frecuentes</h2>
+        </header>
+        <div class="accordion" data-accordion>
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-1" id="faq-1-btn">¿NutriMap diagnostica anemia?<svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg></button></h3>
+          <div id="faq-1" role="region" aria-labelledby="faq-1-btn" class="accordion-panel" hidden>
+            <p>No. NutriMap ofrece información educativa sobre alimentos con hierro y no diagnostica, no reemplaza una evaluación clínica ni recomienda suplementos. Si tienes síntomas, acude a un profesional de salud.</p>
+          </div>
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-2" id="faq-2-btn">¿NutriMap vende comida?<svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg></button></h3>
+          <div id="faq-2" role="region" aria-labelledby="faq-2-btn" class="accordion-panel" hidden>
+            <p>No. Reúne información que publican los comercios y reportan los estudiantes. Compras directamente en el local o el mercado.</p>
+          </div>
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-3" id="faq-3-btn">¿Cómo sé si un precio está actualizado?<svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg></button></h3>
+          <div id="faq-3" role="region" aria-labelledby="faq-3-btn" class="accordion-panel" hidden>
+            <p>Cada local muestra cuándo se actualizó por última vez. Si algo no coincide, puedes reportarlo desde su ficha.</p>
+          </div>
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-4" id="faq-4-btn">¿Cómo cuidan mis datos y mi ubicación?<svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg></button></h3>
+          <div id="faq-4" role="region" aria-labelledby="faq-4-btn" class="accordion-panel" hidden>
+            <p>Pedimos consentimiento antes de guardar tus datos, usamos la ubicación solo mientras usas la app y puedes eliminar tu cuenta en cualquier momento.</p>
+          </div>
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-5" id="faq-5-btn">¿Cuánto cuesta usar NutriMap?<svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg></button></h3>
+          <div id="faq-5" role="region" aria-labelledby="faq-5-btn" class="accordion-panel" hidden>
+            <p>Para estudiantes es gratuito. Los comercios pueden registrarse y publicar su oferta sin costo durante el piloto.</p>
+          </div>
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-6" id="faq-6-btn">¿Dónde uso NutriMap?<svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg></button></h3>
+          <div id="faq-6" role="region" aria-labelledby="faq-6-btn" class="accordion-panel" hidden>
+            <p>En la app web de NutriMap, que es un espacio aparte de este sitio. Desde aquí puedes abrirla con el botón «Abrir la app» y entrar como estudiante, comercio o nutricionista.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- US44 · Equipo (no cuenta dentro de las 30 HU core) -->
+    <section id="equipo" class="section section-alt" aria-labelledby="equipo-title" data-hu="US44">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="equipo-title">Equipo NutriMap</h2>
+          <p>Estudiantes de Ingeniería de Software e Ingeniería de Sistemas de Información de la UPC.</p>
+        </header>
+        <ul class="team">
+          <li class="card member"><img src="../assets/images/equipo/aguirre.svg" width="96" height="96" loading="lazy" alt=""><h3>Jean Pierre Aguirre Sánchez</h3></li>
+          <li class="card member"><img src="../assets/images/equipo/hanco.svg" width="96" height="96" loading="lazy" alt=""><h3>Christopher Alonso Hanco Delgado</h3></li>
+          <li class="card member"><img src="../assets/images/equipo/ugarte.svg" width="96" height="96" loading="lazy" alt=""><h3>Marco Joaquín Ugarte Mendizábal</h3></li>
+          <li class="card member"><img src="../assets/images/equipo/cordova.svg" width="96" height="96" loading="lazy" alt=""><h3>Alexander Piero Córdova Segura</h3></li>
+          <li class="card member"><img src="../assets/images/equipo/alcocer.svg" width="96" height="96" loading="lazy" alt=""><h3>Joaquín Alejandro Alcocer Coronado</h3></li>
+          <li class="card member"><img src="../assets/images/equipo/soberon.svg" width="96" height="96" loading="lazy" alt=""><h3>Fares Isaí Soberón Púa</h3></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- US41 · Solicitud de información · US42 · Lista de espera -->
+    <section id="contacto" class="section section-alt" aria-labelledby="contacto-title" data-hu="US41 US42">
+      <div class="container contact-layout">
+        <div class="card">
+          <h2 id="contacto-title">Solicita información</h2>
+          <p class="muted">Te respondemos al correo en un plazo de 2 días hábiles.</p>
+          <form data-contact-form novalidate>
+            <p class="hint">Los campos con <span class="req">*</span> son obligatorios.</p>
+            <div class="field">
+              <label for="ct-name">Nombre completo <span class="req" aria-hidden="true">*</span></label>
+              <input id="ct-name" name="name" type="text" required aria-required="true" autocomplete="name" aria-describedby="ct-name-error">
+              <p id="ct-name-error" class="error-msg" hidden></p>
+            </div>
+            <div class="field">
+              <label for="ct-email">Correo electrónico <span class="req" aria-hidden="true">*</span></label>
+              <input id="ct-email" name="email" type="email" required aria-required="true" autocomplete="email" placeholder="nombre@correo.com" aria-describedby="ct-email-error">
+              <p id="ct-email-error" class="error-msg" hidden></p>
+            </div>
+            <div class="field">
+              <label for="ct-profile">Perfil <span class="req" aria-hidden="true">*</span></label>
+              <select id="ct-profile" name="profile" required aria-required="true" aria-describedby="ct-profile-error">
+                <option value="">Selecciona tu perfil</option>
+                <option value="estudiante">Estudiante</option>
+                <option value="comercio">Comercio</option>
+                <option value="nutricionista">Nutricionista o bienestar</option>
+                <option value="otro">Otro</option>
+              </select>
+              <p id="ct-profile-error" class="error-msg" hidden></p>
+            </div>
+            <div class="field">
+              <label for="ct-msg">Mensaje <span class="req" aria-hidden="true">*</span></label>
+              <textarea id="ct-msg" name="message" rows="4" required aria-required="true" maxlength="500" aria-describedby="ct-msg-count ct-msg-error"></textarea>
+              <p id="ct-msg-count" class="hint">0 de 500 caracteres</p>
+              <p id="ct-msg-error" class="error-msg" hidden></p>
+            </div>
+            <button class="btn btn-primary" type="submit">Enviar</button>
+            <div class="form-success" data-contact-success role="status" hidden></div>
+          </form>
+        </div>
+
+        <div class="card waitlist" id="lista-espera" tabindex="-1">
+          <h2>Únete a la lista de espera</h2>
+          <p class="muted">¿Tu campus o distrito todavía no aparece en la app? Déjanos tu correo y te avisamos cuando NutriMap llegue.</p>
+          <form data-waitlist-form novalidate>
+            <div class="field">
+              <label for="wl-email">Correo electrónico <span class="req" aria-hidden="true">*</span></label>
+              <input id="wl-email" name="email" type="email" required aria-required="true" autocomplete="email" placeholder="nombre@upc.edu.pe" aria-describedby="wl-email-error">
+              <p id="wl-email-error" class="error-msg" hidden></p>
+            </div>
+            <div class="field">
+              <label for="wl-campus">Campus o distrito <span class="req" aria-hidden="true">*</span></label>
+              <select id="wl-campus" name="campus" required aria-required="true" data-campus-select data-placeholder="Selecciona tu campus" aria-describedby="wl-campus-error"></select>
+              <p id="wl-campus-error" class="error-msg" hidden></p>
+            </div>
+            <div class="field">
+              <label class="check"><input type="checkbox" name="consent" required aria-required="true" aria-describedby="wl-consent-error">
+                <span>Acepto recibir novedades y el uso de mi correo para este fin. Puedo darme de baja cuando quiera. <span class="req" aria-hidden="true">*</span></span></label>
+              <p id="wl-consent-error" class="error-msg" hidden></p>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Unirme</button>
+            <div class="form-success" data-waitlist-success role="status" hidden></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <a class="brand brand-footer" href="#inicio"><img src="../assets/images/logo.svg" alt="" width="28" height="28"><span>NutriMap</span></a>
+        <p>Proyecto académico del curso HCI for UX Design (1ASI0784), UPC, ciclo 2026-20.</p>
+      </div>
+      <nav aria-label="Pie de página">
+        <h2 class="footer-title">Sitio</h2>
+        <ul>
+          <li><a href="#como-funciona">Cómo funciona</a></li>
+          <li><a href="#radar">Radar de ejemplo</a></li>
+          <li><a href="#faq">Preguntas frecuentes</a></li>
+          <li><a href="#equipo">Equipo</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="La app">
+        <h2 class="footer-title">La app</h2>
+        <ul>
+          <li><a href="../app/index.html">Abrir la app</a></li>
+          <li><a href="../app/index.html#/registro">Crear cuenta</a></li>
+          <li><a href="../app/index.html#/acceso-rol?r=com">Entrar como comercio</a></li>
+          <li><a href="#contacto">Solicitar información</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <div class="snackbar" role="status" aria-live="polite" data-snackbar hidden>
+    <span data-snackbar-text></span>
+    <button type="button" class="icon-btn icon-btn-inverse" data-snackbar-close aria-label="Cerrar aviso"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-close"/></svg></button>
+  </div>
+  <div class="sr-only" aria-live="polite" data-announcer></div>
+
+  <noscript><p class="noscript">Activa JavaScript para usar el radar de ejemplo y los formularios. El resto del contenido se puede leer sin él.</p></noscript>
+</body>
+</html>
