@@ -22,19 +22,6 @@ web/
 └── docs/                 README.md (este archivo) y landing.md
 ```
 
-Los enlaces entre la landing y la app son relativos y apuntan a los archivos (`../app/index.html`, `../pages/index.html`), no a las carpetas, así que funcionan igual abriendo los archivos con doble clic, en un servidor local o en GitHub Pages.
-
-## Cómo probarlo
-
-```bash
-cd web
-python -m http.server 8000
-# landing:  http://localhost:8000/pages/
-# app:      http://localhost:8000/app/
-```
-
-Los datos (cuentas, plan, favoritos, reportes, artículos, etiquetas) se guardan en el `localStorage` del navegador; no hay servidor. Todos los locales, precios y artículos son de ejemplo.
-
 ## Cuentas de demostración (contraseña `Demo1234`)
 
 | Rol | Correo | Qué demuestra |
@@ -44,8 +31,6 @@ Los datos (cuentas, plan, favoritos, reportes, artículos, etiquetas) se guardan
 | Comercio | `nuevo.comercio@demo.pe` | Sin negocio: recorre registro, ubicación y primera publicación |
 | Comercio | `sangrecita.lucho@demo.pe` | Sangrecita Don Lucho |
 | Nutricionista | `nutri@upc.edu.pe` | Bandeja con 2 artículos y 2 etiquetas por revisar, borrador con comentarios e historial |
-
-Al abrir la app, la primera pantalla pregunta el rol (`#/rol`: estudiante, comercio o nutricionista). El estudiante puede usar la app sin cuenta o crear una (`#/registro`); comercio y nutricionista pasan por `#/acceso-rol`. «Cambiar rol» en el pie vuelve a esa pantalla.
 
 ## Cómo se conectan los tres roles
 
@@ -80,14 +65,6 @@ Las rutas siguen los mockups (M01–M53, W01–W23) y los user flows F01–F15:
 | | `#/rev/etiqueta/:id` | M41, M48, W20 | US35 |
 | | `#/rev/historial/:id` | M42, W21 | US36 |
 | | `#/rev/contenido`, `#/rev/autor/:id` | M46, W22 | US34 |
-
-## Decisiones que conviene conocer
-
-- **Navegación:** barra inferior en móvil y barra superior desde 768 px, como en los mockups. El comercio y el revisor tienen su propia navegación (3 ítems), separada de la del estudiante.
-- **Orden del radar:** por distancia (US01 CA02). «Priorizar fuentes de hierro» está desactivado por defecto; al activarlo, los locales con hierro aprobado van primero.
-- **Presupuesto y radar (US14 CA02):** el presupuesto semanal se convierte en un filtro inicial de «presupuesto por comida» (el chip más cercano por debajo de presupuesto ÷ 7, p. ej. S/ 90 → «Hasta S/ 12»), que se puede quitar.
-- **Recuperar contraseña (US13):** es una simulación sin correo real: la pantalla ofrece botones de demostración para abrir el enlace válido o uno vencido.
-- **Contraseñas:** se guardan con SHA-256 en el navegador para demostrar el criterio de US48. En producción deben cifrarse en el servidor (bcrypt o Argon2) y viajar por HTTPS.
 - **Recordatorios (US24):** notifican mientras la app está abierta o con el permiso de notificaciones del navegador.
 
 ## Despliegue en GitHub Pages
