@@ -313,3 +313,7 @@ input:focus, select:focus, textarea:focus { outline: none; border: 2px solid var
 
 /* Una sola marca: el rol va como etiqueta, no como otro nombre de producto */
 .role-tag { font-family: var(--font); margin-left: 8px; padding: 2px 8px; border-radius: 999px; background: var(--p-50); color: var(--p-800); font-size: 12px; font-weight: 700; letter-spacing: .01em; white-space: nowrap; }
+
+/* Revisión de artículo en pasos: leer y comentar, verificar, decidir */
+.step-n { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 8px; border-radius: 50%; background: var(--p); color: #fff; font-size: 14px; font-weight: 700; vertical-align: middle; }
+.decide { padding-top: 12px; border-top: 1px solid var(--dv); }

@@ -202,6 +202,15 @@
       ${items.length ? `<nav class="bottom-nav" aria-label="Principal">${items.map((it) => link(it, "bn-it")).join("")}</nav>` : ""}`;
   }
 
+  /* Al marcar una casilla se vuelve a dibujar la pantalla: se conserva lo que la persona ya escribió y los formularios abiertos de [data-keep] */
+  const snapDrafts = () => ({
+    open: $$("[data-keep]").filter((h) => h.innerHTML.trim()).map((h) => [h.dataset.keep, h.innerHTML]),
+    vals: $$("#main textarea[id], #main input[id]:not([type=checkbox]):not([type=radio])").filter((e) => e.value).map((e) => [e.id, e.value])
+  });
+  const restoreDrafts = (d) => {
+    d.open.forEach(([k, html]) => { const h = $$("[data-keep]").find((x) => x.dataset.keep === k); if (h) h.innerHTML = html; });
+    d.vals.forEach(([id, v]) => { const e = document.getElementById(id); if (e && !e.value) e.value = v; });
+  };
   NM.render = (opts = {}) => {
     const { path, q } = parse();
     let m = null;
@@ -217,7 +226,9 @@
     const y = window.scrollY, fk = opts.keep ? focusKey(document.activeElement) : null;
     /* Un aviso de otra pantalla no debe quedarse tapando la nueva */
     if (!opts.keep && !snackEl().hidden && location.hash !== snackAt) NM.snackHide();
+    const drafts = opts.keep ? snapDrafts() : null;
     root().innerHTML = shell(v, ctx);
+    if (drafts) restoreDrafts(drafts);
     document.title = (v.title || "NutriMap") + " · NutriMap Estudiantil";
     NM.cleanup && NM.cleanup(); NM.cleanup = null;
     if (v.mount) v.mount(ctx);
