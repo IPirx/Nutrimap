@@ -173,7 +173,7 @@
   };
 
   GR("/rev/cuenta", { view: () => { const u = NM.user(); return { title: "Cuenta", heading: "Cuenta", sub: "Nutricionista · Bienestar UPC",
-    html: `<div class="narrow stack"><div class="card stack">${NM.myPlace() ? `<p><strong>${esc(NM.myPlace().name)}</strong></p><p class="muted small">Negocio registrado</p>` : ""}<p>${esc(u.name)}</p><p class="muted">${esc(u.email)}</p></div><a class="btn btn-secondary btn-block" href="../pages/index.html">Ir al sitio de NutriMap</a><button type="button" class="btn btn-danger btn-block" data-act="logout">Cerrar sesión</button></div>` }; } });
-  NM.route("/com/cuenta", { guard: (c) => (c.role === "com" ? null : "/acceso-rol?r=com"), view: () => { const u = NM.user(); return { title: "Cuenta", heading: "Cuenta", sub: "Comercio", back: "/com/perfil",
     html: `<div class="narrow stack"><div class="card stack"><p><strong>${esc(u.name)}</strong></p><p class="muted">${esc(u.email)}</p></div><a class="btn btn-secondary btn-block" href="../pages/index.html">Ir al sitio de NutriMap</a><button type="button" class="btn btn-danger btn-block" data-act="logout">Cerrar sesión</button></div>` }; } });
+  NM.route("/com/cuenta", { guard: (c) => (c.role === "com" ? null : "/acceso-rol?r=com"), view: () => { const u = NM.user(); return { title: "Cuenta", heading: "Cuenta", sub: "Comercio", back: "/com/perfil",
+    html: `<div class="narrow stack"><div class="card stack">${NM.myPlace() ? `<p><strong>${esc(NM.myPlace().name)}</strong></p><p class="muted small">Negocio registrado</p>` : ""}<p>${esc(u.name)}</p><p class="muted">${esc(u.email)}</p></div><a class="btn btn-secondary btn-block" href="../pages/index.html">Ir al sitio de NutriMap</a><button type="button" class="btn btn-danger btn-block" data-act="logout">Cerrar sesión</button></div>` }; } });
 })();
