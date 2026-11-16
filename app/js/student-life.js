@@ -19,7 +19,7 @@
         <section class="card stack" aria-labelledby="hoy-t"><div class="row-between"><h2 class="h3" id="hoy-t">Tu plan de hoy · ${DAYS[NM.todayIdx()].long}</h2><a href="#/plan">Ver plan</a></div>
           ${today ? NM.slots.map((sl) => { const m = today[sl.id] ? NM.mealById(today[sl.id]) : null; return m ? `<div><p class="muted small">${sl.label}${m.iron ? " " + NM.ironBadge() : ""}</p><p><strong>${esc(m.name)} · ${money(m.cost)}</strong></p></div>` : ""; }).join("") : `<p class="muted">Aún no tienes un plan para esta semana.</p><a class="btn btn-secondary btn-compact" href="#/plan">Generar mi plan</a>`}</section></div>
         <div class="stack"><section class="card stack" aria-labelledby="gasto-t"><div class="row-between"><h2 class="h3" id="gasto-t">Gasto de la semana</h2><a href="#/gasto">Registrar gasto</a></div>
-          ${NM.prog(pct, "Gasto frente al presupuesto semanal", pct > 100)}<p>Gastado: <strong>${money2(t)} de ${money2(S.prefs.budget)} (${pct} %)</strong></p>
+          ${NM.prog(pct, "Gasto frente al presupuesto semanal", pct > 100)}<p>Gastado: <strong>${money2(t)} de ${money2(S.prefs.budget)} (${pct} %)</strong></p>${S.spend.some((x) => /^g[1-4]$/.test(x.id)) ? `<p class="hint">Datos de ejemplo: registra tu gasto para reemplazarlos.</p>` : ""}
           ${pct >= 80 ? NM.alert("warning", "Superaste el 80 % de tu presupuesto", `Te quedan ${money2(Math.max(0, S.prefs.budget - t))} hasta el domingo.`) : ""}</section>
           ${NM.alert("info", "¿Sabías que?", `La vitamina C del limón ayuda a aprovechar el hierro de las menestras. <a href="#/aprende">Leer más en Aprende ›</a>`)}</div></div>`
     };
@@ -65,7 +65,7 @@
     NM.ensureWeek();
     return { title: "Mi plan", heading: "Mi plan", sub: `Semana del ${NM.weekLabel(S.planWeek || NM.weekStart())}`, wide: true,
       actions: [`<button type="button" class="btn btn-secondary btn-compact" data-act="gen-plan">${icon("refresh", "icon icon-sm")}${S.plan ? "Volver a generar" : "Generar plan"}</button>`],
-      html: S.plan ? planBlock() : `<div class="empty-state">${icon("plan", "icon-lg icon")}<h2 class="h3">Aún no tienes un plan</h2><p class="muted">NutriMap arma un plan de 7 días con desayuno, almuerzo y cena que respeta tu presupuesto semanal de <strong>${money2(S.prefs.budget)}</strong>. <a href="#/perfil?t=pref">Cambiar presupuesto</a></p><button type="button" class="btn btn-primary" data-act="gen-plan">Generar plan</button><p class="hint"><a href="#/historial">¿Quieres reutilizar un plan anterior? Ver historial</a></p></div>` };
+      html: S.plan ? planBlock() : `<div class="empty-state">${icon("plan", "icon-lg icon")}<h2 class="h3">Aún no tienes un plan</h2><p class="muted">NutriMap arma un plan de 7 días con desayuno, almuerzo y cena que respeta tu presupuesto semanal. Escribe cuánto tienes para la semana.</p><form class="narrow stack" data-form="plan-budget" novalidate>${NM.field({ id: "plan-budget", label: "Presupuesto semanal (S/)", type: "text", inputmode: "decimal", value: String(S.prefs.budget), req: true })}<button type="submit" class="btn btn-primary btn-block">Generar plan</button></form><p class="hint"><a href="#/historial">¿Quieres reutilizar un plan anterior? Ver historial</a></p></div>` };
   } });
   NM.act["plan-day"] = (el) => { NM.planDay = Number(el.dataset.v); NM.refresh(); };
   const applyPlan = (budget, ids) => {
@@ -77,6 +77,12 @@
     NM.go("/plan");
     setTimeout(() => NM.snack(prev.plan ? "Generamos un plan nuevo con tu presupuesto." : `Tu plan de 7 días${reduced ? " (solo almuerzo y cena)" : ""} cuesta ${money2(NM.planTotal())} y está dentro de tu presupuesto. El radar ya lo usa como filtro.`,
       prev.plan ? { onAction: () => { S.plan = prev.plan; S.planWeek = prev.week; S.history = prev.hist; S.checked = prev.checked; S.removed = prev.removed; NM.save("plan", "planWeek", "history", "checked", "removed"); NM.refresh(); NM.announce("Recuperamos tu plan anterior."); } } : {}), 50);
+  };
+  NM.form["plan-budget"] = () => {
+    const el = $("#plan-budget"); NM.clr(el);
+    const v = Number(String(el.value).replace(",", "."));
+    if (!(v > 0)) { NM.err(el, "El monto debe ser mayor a cero."); el.focus(); return; }
+    S.prefs.budget = v; NM.save("prefs"); NM.resetRadar(); NM.act["gen-plan"]();
   };
   NM.act["gen-plan"] = () => {
     const b = S.prefs.budget;
@@ -164,7 +170,7 @@
     const body = items.length ? groups().map(([cat, g]) => `<section class="card shop-group"><h2 class="h4">${esc(cat)}</h2><ul>${g.map(row).join("")}</ul></section>`).join("") : `<div class="empty-state">${icon("list", "icon icon-lg")}<h2 class="h3">Tu lista está vacía</h2><p class="muted">La lista se arma con los ingredientes de tu plan semanal. Genera tu plan o añade productos a mano.</p><a class="btn btn-primary btn-compact" href="#/plan">Ir a Mi plan</a></div>`;
     return { title: edit ? "Editar lista" : "Lista de compras", heading: edit ? "Editar lista" : "Lista de compras", sub: S.plan ? `Generada desde tu plan · ${NM.weekLabel(S.planWeek)}` : "Sin plan todavía", back: "/plan",
       actions: edit ? [`<button type="submit" form="edit-form" class="btn btn-primary btn-compact">Listo</button>`] : [`<button type="button" class="btn btn-secondary btn-compact" data-act="share">${icon("share", "icon icon-sm")}Compartir</button>`, `<a class="btn btn-secondary btn-compact" href="#/lista?edit=1">${icon("edit", "icon icon-sm")}Editar</a>`],
-      html: `${!edit && items.length ? `<div class="card stack"><div class="row-between wrap"><strong>${done} de ${items.length} comprados · faltan ${items.length - done}</strong><span class="muted">Costo estimado ${money2(cost)}</span></div>${NM.prog(items.length ? Math.round((done / items.length) * 100) : 0, "Productos comprados")}</div>` : ""}
+      html: `${!edit && items.length ? `<div class="card stack"><div class="row-between wrap"><strong>${done} de ${items.length} comprados · faltan ${items.length - done}</strong><span class="muted">Costo estimado de insumos ${money2(cost)}</span></div><p class="hint">Este monto suma solo los productos de la lista. El costo del plan suma el precio de cada comida, por eso no coinciden.</p>${NM.prog(items.length ? Math.round((done / items.length) * 100) : 0, "Productos comprados")}</div>` : ""}
         <form id="edit-form" data-form="edit-list" class="stack" novalidate>${body}</form>
         <form class="card stack add-item" data-form="add-item" novalidate>${NM.field({ id: "add-item", label: "Añadir producto", ph: "Ej.: avena 1 kg" })}<button class="btn btn-secondary btn-compact" type="submit">${icon("plus", "icon icon-sm")}Añadir</button></form>
         <a class="btn btn-secondary btn-block" href="#/radar?mercado=1" data-act="where-buy" data-native>${icon("pin", "icon icon-sm")}Ver dónde comprar cerca</a>` };

@@ -186,7 +186,7 @@
     const right = kind === "est"
       ? `<a class="loc-chip" href="#/ubicacion" aria-label="Ubicación: ${NM.esc(loc)}, radio ${NM.distLabel(S.loc.radius)}. Cambiar">${NM.icon("pin")}<span>${NM.esc(loc)} · ${NM.distLabel(S.loc.radius)}</span><span class="link-like">Cambiar</span></a>
          ${u ? `<a class="avatar" href="#/perfil" aria-label="Mi perfil">${NM.esc((u.name || u.email)[0].toUpperCase())}</a>` : `<a class="btn btn-secondary btn-compact" href="#/ingresar">Ingresar</a>`}`
-      : kind === "none" ? "" : `<span class="who">${NM.esc(u ? u.name : "")}</span><a class="avatar" href="#${kind === "rev" ? "/rev/cuenta" : "/com/cuenta"}" aria-label="Mi cuenta">${NM.esc(u ? (u.name || "?")[0].toUpperCase() : "?")}</a>`;
+      : kind === "none" ? "" : `<span class="who">${NM.esc(u ? (kind === "com" && NM.myPlace() ? NM.myPlace().name : u.name) : "")}</span><a class="avatar" href="#${kind === "rev" ? "/rev/cuenta" : "/com/cuenta"}" aria-label="Mi cuenta">${NM.esc(u ? (u.name || "?")[0].toUpperCase() : "?")}</a>`;
     const back = v.back ? `<a class="icon-btn back-btn" href="#${v.back}" data-act="back" data-to="${v.back}" aria-label="Volver">${NM.icon("back")}</a>` : "";
     const acts = (v.actions || []).join("");
     return `<a class="skip-link" href="#main">Saltar al contenido principal</a>
@@ -198,7 +198,7 @@
         <div class="page-head">${back}<div class="ph-t"><h1>${NM.esc(v.heading || v.title)}</h1>${v.sub ? `<p class="ph-s">${v.sub}</p>` : ""}</div>${acts ? `<div class="ph-a">${acts}</div>` : ""}</div>
         ${NM.flash ? (() => { const f = NM.flash; NM.flash = null; return f; })() : ""}
         <div class="page-body">${v.html}</div></main>
-      <footer class="app-foot"><a href="../pages/index.html">Ir al sitio de NutriMap</a><span> · La app es un espacio aparte del sitio informativo.</span><span> · </span><button type="button" class="btn-link foot-reset" data-act="change-role">Cambiar rol</button><span> · </span><button type="button" class="btn-link foot-reset" data-act="demo-reset">Restablecer demo</button></footer>
+      <footer class="app-foot"><a href="../pages/index.html">Ir al sitio de NutriMap</a><span> · La app es un espacio aparte del sitio informativo.</span><span> · </span>${u ? `<button type="button" class="btn-link foot-reset" data-act="logout">Cerrar sesión</button><span> · </span>` : ""}<button type="button" class="btn-link foot-reset" data-act="change-role">Cambiar rol</button><span> · </span><button type="button" class="btn-link foot-reset" data-act="demo-reset">Restablecer demo</button></footer>
       ${items.length ? `<nav class="bottom-nav" aria-label="Principal">${items.map((it) => link(it, "bn-it")).join("")}</nav>` : ""}`;
   }
 
@@ -218,7 +218,12 @@
     if (!m) { NM.go("/inicio", true); return; }
     const user = NM.user(), role = user ? user.role : "est";
     /* Al abrir la app sin sesión ni rol elegido, primero se pregunta el rol */
-    if (!user && !S.entry && path !== "/rol") { NM.go("/rol", true); return; }
+    if (!user && !S.entry) {
+      /* Los enlaces de la landing («Entrar como comercio / nutricionista», «Iniciar sesión», «Crear cuenta») ya traen el rol: no se pregunta de nuevo */
+      const direct = path === "/acceso-rol" && (q.r === "com" || q.r === "rev") ? q.r : (path === "/ingresar" || path === "/registro") ? "est" : null;
+      if (direct) { S.entry = direct; NM.save("entry"); }
+      else if (path !== "/rol") { NM.go("/rol", true); return; }
+    }
     const ctx = { params: m.params, q, path, user, role };
     if (m.r.def.guard) { const to = m.r.def.guard(ctx); if (to) { NM.go(to, true); return; } }
     const v = m.r.def.view(ctx);

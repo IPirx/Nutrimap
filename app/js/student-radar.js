@@ -5,7 +5,7 @@
   const NM = window.NM, S = NM.S, D = window.NM_DATA, R = NM.R;
   const { $, $$, esc, money, norm, distLabel, icon } = NM;
   /* Mismo juego de chips en la app, la landing y los mockups */
-  const PRICES = [5, 8, 12];
+  const PRICES = [5, 8, 10, 12];
   const TYPES = Object.keys(D.offerTypes);
 
   /* ---------- Ubicación · US10 ---------- */
@@ -58,7 +58,7 @@
 
   /* ---------- Radar ---------- */
   const chipFromBudget = () => { const cap = S.prefs.budget / 7; let c = PRICES[0]; PRICES.forEach((x) => { if (x <= cap) c = x; }); return c; };
-  NM.resetRadar = () => { R.price = chipFromBudget(); R.distance = S.loc.radius; R.types = new Set(TYPES); R.iron = false; R.open = false; R.q = ""; };
+  NM.resetRadar = () => { R.price = chipFromBudget(); R.touched = false; R.distance = S.loc.radius; R.types = new Set(TYPES); R.iron = false; R.open = false; R.q = ""; };
   const initRadar = () => { if (!R.ready) { NM.resetRadar(); R.ready = true; R.sort = "distance"; R.zoom = 1; R.sel = null; } };
   const matches = (p) => {
     if (!p.published) return false;
@@ -95,7 +95,7 @@
     const box = $("[data-results]"); if (!box) return;
     const items = sorted(S.places.filter(matches));
     const chips = [];
-    if (R.price !== null) chips.push(["price", "Hasta " + money(R.price)]);
+    if (R.price !== null) chips.push(["price", "Hasta " + money(R.price) + (R.price === chipFromBudget() && !R.touched ? " · según tu presupuesto" : "")]);
     if (R.distance !== S.loc.radius) chips.push(["dist", distLabel(R.distance)]);
     if (R.types.size < TYPES.length) R.types.forEach((t) => chips.push(["type:" + t, D.offerTypes[t]]));
     /* El hierro tiene su propio chip fijo (siempre visible), así que no se repite entre los filtros activos */
@@ -167,7 +167,7 @@
   NM.form.rsearch = () => { R.q = $("#rq").value.trim(); paint(); };
   NM.chg.rsort = (el) => { R.sort = el.value; paint(true); };
   NM.chg["f-type"] = (el) => { if (el.checked) R.types.add(el.value); else R.types.delete(el.value); if (!R.types.size) TYPES.forEach((t) => R.types.add(t)); changed(); };
-  NM.act["f-price"] = (el) => { R.price = el.dataset.v === "" ? null : Number(el.dataset.v); changed(); };
+  NM.act["f-price"] = (el) => { R.touched = true; R.price = el.dataset.v === "" ? null : Number(el.dataset.v); changed(); };
   NM.act["f-dist"] = (el) => { R.distance = Number(el.dataset.v); changed(); };
   NM.act["f-iron"] = () => { R.iron = !R.iron; changed(); };
   NM.act["f-open"] = () => { R.open = !R.open; changed(); };

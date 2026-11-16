@@ -12,7 +12,9 @@ window.NM_DATA = {
   offerTypes: {
     menu: "Menú del día",
     mercado: "Mercado e insumos",
-    cafeteria: "Cafetería"
+    cafeteria: "Cafetería",
+    casera: "Cocina casera o delivery",
+    saludable: "Comida saludable"
   },
 
   /* x / y: posición del pin en el mapa de ejemplo (porcentaje). */

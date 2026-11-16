@@ -103,7 +103,7 @@
     const checks = labelChecks(d), miss = checks.findIndex((c) => !c), done = miss < 0;
     const queue = NM.labels("pendiente"), pos = queue.findIndex((x) => x.id === l.id);
     const fact = (k, v, warn) => `<div class="fact"><dt>${k}</dt><dd>${v ? esc(v) : `<span class="fact-miss">${icon("alert", "icon icon-sm")}${warn}</span>`}</dd></div>`;
-    const crit = (c, i) => `<div class="${!done && i === miss ? "check-miss" : ""}"><label class="check"><input type="checkbox" data-chg="lchk" data-id="${esc(l.id)}" value="${i}" ${checks[i] ? "checked" : ""}> ${esc(c)}</label>${i === 1 && !por ? `<p class="hint">El comercio no indicó la porción: no marques este punto; observa la solicitud y pídele que la agregue.</p>` : ""}${!done && i === miss ? `<p class="error-msg">${icon("alert", "icon icon-sm")}<span>Falta este punto para poder aprobar</span></p>` : ""}</div>`;
+    const crit = (c, i) => `<div class="${!done && i === miss ? "check-miss" : ""}"><label class="check"><input type="checkbox" data-chg="lchk" data-id="${esc(l.id)}" value="${i}" ${checks[i] ? "checked" : ""}> ${esc(c)}</label>${i === 0 ? `<p class="hint">Referencia: hierro hemo (sangrecita, hígado, carnes) o no hemo (menestras, espinaca). La app aún no muestra mg por porción: decide según los ingredientes y la porción declarados.</p>` : ""}${i === 1 && !por ? `<p class="hint">El comercio no indicó la porción: no marques este punto; observa la solicitud y pídele que la agregue.</p>` : ""}${!done && i === miss ? `<p class="error-msg">${icon("alert", "icon icon-sm")}<span>Falta este punto para poder aprobar</span></p>` : ""}</div>`;
     return { title: "Validar etiqueta", heading: "Validar etiqueta", sub: `${esc(l.place.name)} · solicitada ${esc(NM.fmtWhen(d.requestedAt || Date.now()))}${pending && pos >= 0 ? ` · ${pos + 1} de ${queue.length} pendientes` : ""}`, back: "/rev?f=etiquetas", wide: true,
       html: split("/rev/etiqueta/" + lid(l), `<form class="narrow stack" data-form="label" data-id="${esc(l.id)}" novalidate><div class="card stack"><h2 class="h3">${esc(d.dish)}</h2>
         <dl class="facts">${fact("Comercio", `${l.place.name} · ${l.place.address}`)}${fact("Ingredientes", ing, "El comercio no indicó ingredientes")}${fact("Porción", por, "El comercio no indicó la porción")}${fact("Precio del menú", NM.priceLabel(l.place))}</dl>
@@ -132,7 +132,7 @@
     const f = $("[data-form=label]"), n = $("#lb-note"); NM.clr(n);
     if (!n.value.trim()) { NM.err(n, "Escribe el motivo para observar la etiqueta."); n.focus(); return; }
     const l = labelNow(f), snap = snapLabel(l.dish); Object.assign(l.dish, { ironStatus: "observada", note: n.value.trim() }); NM.save("places");
-    nextLabel(); NM.snack(`Marcamos la solicitud como observada y enviamos el motivo a ${l.place.name}.`, { onAction: undoLabel(l, snap) });
+    nextLabel(); NM.snack(`Marcamos la solicitud como observada y enviamos el motivo a ${l.place.name}.${NM.labels("pendiente").length ? " Pasamos a la siguiente solicitud pendiente." : ""}`, { onAction: undoLabel(l, snap) });
   };
 
   /* ---------- Historial inmutable · US36 ---------- */
@@ -173,7 +173,7 @@
   };
 
   GR("/rev/cuenta", { view: () => { const u = NM.user(); return { title: "Cuenta", heading: "Cuenta", sub: "Nutricionista · Bienestar UPC",
-    html: `<div class="narrow stack"><div class="card stack"><p><strong>${esc(u.name)}</strong></p><p class="muted">${esc(u.email)}</p></div><a class="btn btn-secondary btn-block" href="../pages/index.html">Ir al sitio de NutriMap</a><button type="button" class="btn btn-danger btn-block" data-act="logout">Cerrar sesión</button></div>` }; } });
+    html: `<div class="narrow stack"><div class="card stack">${NM.myPlace() ? `<p><strong>${esc(NM.myPlace().name)}</strong></p><p class="muted small">Negocio registrado</p>` : ""}<p>${esc(u.name)}</p><p class="muted">${esc(u.email)}</p></div><a class="btn btn-secondary btn-block" href="../pages/index.html">Ir al sitio de NutriMap</a><button type="button" class="btn btn-danger btn-block" data-act="logout">Cerrar sesión</button></div>` }; } });
   NM.route("/com/cuenta", { guard: (c) => (c.role === "com" ? null : "/acceso-rol?r=com"), view: () => { const u = NM.user(); return { title: "Cuenta", heading: "Cuenta", sub: "Comercio", back: "/com/perfil",
     html: `<div class="narrow stack"><div class="card stack"><p><strong>${esc(u.name)}</strong></p><p class="muted">${esc(u.email)}</p></div><a class="btn btn-secondary btn-block" href="../pages/index.html">Ir al sitio de NutriMap</a><button type="button" class="btn btn-danger btn-block" data-act="logout">Cerrar sesión</button></div>` }; } });
 })();

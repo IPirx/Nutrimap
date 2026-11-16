@@ -123,7 +123,7 @@
       if (firstInvalid(form)) return;
       const name = el.name.value.trim().split(" ")[0];
       withPending(form.querySelector('button[type="submit"]'), "Enviando…", () => {
-        const ok = $("[data-contact-success]"); ok.textContent = `Recibimos tu solicitud, ${name}. Te escribiremos a ${email} en un plazo de 2 días hábiles.`; ok.hidden = false; form.reset(); count.textContent = "0 de 500 caracteres";
+        const ok = $("[data-contact-success]"); ok.textContent = `Recibimos tu solicitud, ${name}. Te escribiremos a ${email} en un plazo de 2 días hábiles.`; ok.hidden = false; ok.tabIndex = -1; ok.scrollIntoView({ block: "center", behavior: "smooth" }); ok.focus({ preventScroll: true }); form.reset(); count.textContent = "0 de 500 caracteres";
       });
     });
   })();
@@ -134,7 +134,7 @@
     $$("[data-campus-select]").forEach((s) => { s.innerHTML = `<option value="">${esc(s.dataset.placeholder || "Selecciona")}</option>` + D.campuses.map((c) => `<option value="${c.id}">${esc(c.name)}</option>`).join("") + '<option value="otro">Otro campus o distrito</option>'; });
     wireClear(form);
     form.addEventListener("submit", (e) => {
-      e.preventDefault(); $("[data-waitlist-success]").hidden = true;
+      e.preventDefault(); $("[data-waitlist-success]").hidden = true; { const c = $("[data-contact-success]"); if (c) c.hidden = true; }
       [el.email, el.campus, el.consent].forEach(clearError);
       const email = el.email.value.trim().toLowerCase(), list = store.get("waitlist", []);
       if (!email) setError(el.email, "Escribe tu correo electrónico."); else if (!EMAIL_RE.test(email)) setError(el.email, "Ingresa un correo válido, por ejemplo nombre@upc.edu.pe."); else if (list.includes(email)) setError(el.email, "Este correo ya está en la lista de espera. No lo registramos dos veces.");
@@ -142,7 +142,7 @@
       if (!el.consent.checked) setError(el.consent, "Debes aceptar el uso de tu correo para unirte a la lista.");
       if (firstInvalid(form)) return;
       const place = el.campus.value === "otro" ? "tu distrito" : (D.campuses.find((c) => c.id === el.campus.value) || {}).name;
-      withPending(form.querySelector('button[type="submit"]'), "Registrando…", () => { list.push(email); store.set("waitlist", list); const ok = $("[data-waitlist-success]"); ok.textContent = `Listo. Te avisaremos en ${email} cuando NutriMap llegue a ${place}.`; ok.hidden = false; form.reset(); });
+      withPending(form.querySelector('button[type="submit"]'), "Registrando…", () => { list.push(email); store.set("waitlist", list); const ok = $("[data-waitlist-success]"); ok.textContent = `Listo. Te avisaremos en ${email} cuando NutriMap llegue a ${place}.`; ok.hidden = false; ok.tabIndex = -1; ok.scrollIntoView({ block: "center", behavior: "smooth" }); ok.focus({ preventScroll: true }); form.reset(); });
     });
   })();
   void snack;

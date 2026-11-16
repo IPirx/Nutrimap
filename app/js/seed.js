@@ -81,7 +81,7 @@
         { h: "¿Por qué las lentejas?", p: "Las lentejas curan la anemia si las comes todos los días. Son baratas y fáciles de encontrar en cualquier mercado." },
         { h: "Cómo prepararlas", p: "Remójalas desde la noche anterior y acompáñalas con limón o naranja para aprovechar mejor el hierro." }
       ],
-      check: [true, true, true, false], comments: [],
+      check: [false, false, false, false], comments: [],
       history: [hist("2026-11-02T10:05", TEAM, "Creado", "Borrador inicial"), hist("2026-11-02T16:40", TEAM, "Enviado a revisión", "Versión 1 enviada")]
     },
     {
@@ -123,7 +123,7 @@
   ];
 
   window.NM_SEED = {
-    ver: 5,
+    ver: 6,
     ingredients,
     portions,
     labelCriteria: ["Contiene una fuente de hierro reconocida", "La porción está indicada", "No promete tratar ni curar enfermedades"],
