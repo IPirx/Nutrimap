@@ -248,7 +248,7 @@
         ${p.noMenuToday ? NM.alert("warning", "El menú de hoy no está disponible", `Este comercio todavía no publicó su oferta de hoy. Última actualización: ${esc(NM.fmtWhen(p.updatedAt))}.`)
           : `<h2 class="h3">${p.type === "mercado" ? "Insumos destacados" : "Menú de hoy"}</h2><ul class="menu-today card">${p.menu.map((m) => `<li><span><small>${esc(m.course)}</small>${esc(m.dish)}</span><span class="tags">${NM.dishTag(m)}</span></li>`).join("")}</ul>
           <p class="hint">Etiquetas orientativas revisadas por nutricionistas. No reemplazan una consulta profesional.</p>`}</div>
-        <div class="stack side"><p class="muted">${icon("clock", "icon icon-sm")} Precio actualizado por el comercio: ${esc(NM.fmtWhen(p.updatedAt))}. Datos de ejemplo.</p>
+        <div class="stack side"><p class="muted">${icon("clock", "icon icon-sm")} Precio actualizado por el comercio: ${esc(NM.fmtWhen(p.updatedAt)).replace(/\.?$/, ".")} Datos de ejemplo.</p>
           <a class="btn btn-primary btn-block" href="#/local/${p.id}/ruta">${icon("walk", "icon icon-sm")}Cómo llegar</a>
           <button class="btn btn-secondary btn-block" type="button" data-act="add-plan" data-id="${p.id}">${icon("plus", "icon icon-sm")}Añadir a mi plan</button>
           <button class="btn btn-secondary btn-block" type="button" data-act="fav" data-id="${p.id}" data-name="${esc(p.name)}" aria-pressed="${on}">${icon(on ? "starf" : "star", "icon icon-sm")}<span class="fav-text">${on ? "Guardado en favoritos" : "Guardar en favoritos"}</span></button>
@@ -263,7 +263,7 @@
     return { title: "Cómo llegar", heading: "Cómo llegar", sub: esc(p.name), back: "/local/" + p.id,
       html: `<div class="two-col"><div class="stack">${NM.mapHtml({ pins: [{ id: p.id, x: p.x, y: p.y, label: p.name, name: p.name, distance: p.distance, sel: true }], route: `50,56 ${p.x},56 ${p.x},${p.y}`, h: 280 })}
         <p class="hint">El mapa es una vista de ejemplo. Las indicaciones en texto tienen la misma información.</p></div>
-        <div class="stack"><div class="card"><p class="big">${p.walk} min a pie · ${distLabel(p.distance)}</p><p class="muted">Llegas antes del cierre: ${esc(p.hours)}.</p></div>
+        <div class="stack"><div class="card"><p class="big">${p.walk} min a pie · ${distLabel(p.distance)}</p><p class="muted">Llegas antes del cierre: ${esc(p.hours).replace(/\.?$/, ".")}</p></div>
           ${NM.alert("info", "", `Punto de partida: ${S.loc.mode === "gps" ? "tu ubicación actual" : `campus ${esc(from)} (ubicación elegida)`}. <a href="#/ubicacion?next=/local/${p.id}/ruta">Cambiar</a>`, "pin")}
           <ol class="steps-list card"><li>Sal por la puerta principal de ${esc(from)}.</li><li>Camina hacia ${esc(p.address)}.</li><li>El local está a ${p.walk} minutos; revisa el horario antes de salir.</li></ol>
           <a class="btn btn-secondary btn-block" href="#/local/${p.id}">Volver a la ficha</a></div></div>`,

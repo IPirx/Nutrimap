@@ -77,7 +77,7 @@
     const i = Number(f.dataset.i), t = $("#cm-" + i), a = NM.article(NM.cur().path.split("/").pop()); NM.clr(t);
     if (!t.value.trim()) { NM.err(t, "Escribe qué debe cambiar el autor en este fragmento."); t.focus(); return; }
     const text = a.body[i].p, frag = f.dataset.frag || text.split(/(?<=[.!?])\s/)[0].slice(0, 80);
-    a.comments.push({ id: NM.uid(), idx: i, frag, text: t.value.trim() }); NM.save("articles"); NM.refresh(); NM.announce("Comentario guardado.");
+    a.comments.push({ id: NM.uid(), idx: i, frag, text: t.value.trim() }); NM.save("articles"); $(`[data-c-form="${i}"]`).innerHTML = ""; NM.refresh(); NM.announce("Comentario guardado.");
   };
   NM.act["c-del"] = (el) => { const a = NM.article(NM.cur().path.split("/").pop()), c = a.comments.find((x) => x.id === el.dataset.id); a.comments = a.comments.filter((x) => x.id !== c.id); NM.save("articles"); NM.refresh(); NM.snack("Quitaste el comentario.", { onAction: () => { a.comments.push(c); NM.save("articles"); NM.refresh(); } }); };
   NM.act["ask-changes"] = (el) => {
